@@ -1,0 +1,32 @@
+﻿@page "/categories"
+@using HexoBlog.Model
+@using HexoBlog.Service
+@inject CategoryService CategoryService
+
+<h1>Categories</h1>
+
+@if (CategoryService.Categories.Count == 0)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var category in CategoryService.Categories)
+        {
+            <li>
+              
+                <p>Path: @category.Name</p>
+                <p>Path: @category.Path</p>
+                <p>Count: @category.Count</p>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await CategoryService.LoadCategoriesAsync();
+    }
+}
