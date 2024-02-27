@@ -1,0 +1,30 @@
+﻿@page "/articles/{path}"
+@using Microsoft.AspNetCore.Components.Web
+@using HexoBlog.Model
+@inject ArticleService ArticleService
+@inject HttpClient Http
+
+<h1>Article Content</h1>
+
+@if (articleContent != null)
+{
+    <div>@articleContent</div>
+}
+else
+{
+    <p><em>Loading...</em></p>
+}
+
+@code {
+    [Parameter]
+    public string Path { get; set; }
+  
+
+    private string articleContent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 当组件初始化完成后，调用ArticleService获取文章内容
+        articleContent = await ArticleService.GetArticleContentAsync(Path);
+    }
+}
