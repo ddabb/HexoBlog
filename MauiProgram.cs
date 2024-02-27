@@ -16,7 +16,7 @@ namespace HexoBlog
                 });
 
             builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddScoped<CategoryService>();
+            builder.Services.AddScoped<ClassifyService>();
 
 
 #if DEBUG

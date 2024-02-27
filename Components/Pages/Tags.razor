@@ -1,4 +1,4 @@
-﻿@page "/categories"
+﻿@page "/tags"
 @using HexoBlog.Model
 @using HexoBlog.Service
 @inject ClassifyService CategoryService
@@ -12,7 +12,7 @@
 else
 {
     <ul>
-        @foreach (var category in CategoryService.Tags)
+        @foreach (var category in CategoryService.Categories)
         {
             <li>
               
@@ -27,6 +27,6 @@ else
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await CategoryService.LoadTagAsync();
+        await CategoryService.LoadCategoriesAsync();
     }
 }
