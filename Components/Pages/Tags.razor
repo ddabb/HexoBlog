@@ -5,7 +5,7 @@
 @inject NavigationManager NavigationManager
 
 <!-- 硬编码的a标签用于页面跳转 -->
-<a href="@GetArticleUrl("api/articles/PMP/引论/指南概述和目的/项目管理标准.json")" @onclick="NavigateToArticle">跳转到文章页面</a>
+<a href="#" @onclick="GoToArticle">跳转到文章页面</a>
 
 
 
@@ -34,13 +34,14 @@ else
     {
         await CategoryService.LoadTagAsync();
     }
-    private string GetArticleUrl(string articlePath)
-    {
-        // 构建Article.razor页面的完整URL
-        // 假设Article.razor页面路由为/articles/{path}
-        return $"articles/{articlePath}";
-    }
 
+    private void GoToArticle()
+    {
+        var name = "PMP/引论/指南概述和目的/项目管理标准.json";
+    
+        NavigationManager.NavigateTo($"articles?name={name}");
+
+    }
     // 用于处理导航事件的方法（可选，如果不需要在点击时执行其他操作，可以移除）
     private void NavigateToArticle()
     {

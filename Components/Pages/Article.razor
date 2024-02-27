@@ -1,7 +1,8 @@
-﻿@page "/articles/{path}"
+﻿@page "/articles"
 @using Microsoft.AspNetCore.Components.Web
 @using HexoBlog.Model
 @using HexoBlog.Service
+@inject NavigationManager NavigationManager
 @inject ArticleService aService
 @inject HttpClient Http
 
@@ -17,15 +18,32 @@ else
 }
 
 @code {
+   
+   
     [Parameter]
-    public string Path { get; set; }
-  
+    public string Name { get; set; }
 
     private string articleContent;
 
     protected override async Task OnInitializedAsync()
     {
+        // 获取当前的 URI
+        var uri = NavigationManager.Uri;
+
+        // 解析查询字符串
+        var queryParameters = new Uri(uri).Query.TrimStart('?').Split('&');
+
+        // 遍历查询字符串参数，并找到 name 参数的值
+        foreach (var parameter in queryParameters)
+        {
+            var keyValue = parameter.Split('=');
+            if (keyValue.Length == 2 && keyValue[0] == "name")
+            {
+                Name = keyValue[1];
+                break;
+            }
+        }
         // 当组件初始化完成后，调用ArticleService获取文章内容
-        articleContent = await aService.GetArticleContentAsync(Path);
+        articleContent = await aService.GetArticleContentAsync(Name);
     }
 }
