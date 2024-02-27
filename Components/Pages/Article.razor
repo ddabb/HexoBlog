@@ -1,7 +1,8 @@
 ﻿@page "/articles/{path}"
 @using Microsoft.AspNetCore.Components.Web
 @using HexoBlog.Model
-@inject ArticleService ArticleService
+@using HexoBlog.Service
+@inject ArticleService aService
 @inject HttpClient Http
 
 <h1>Article Content</h1>
@@ -25,6 +26,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         // 当组件初始化完成后，调用ArticleService获取文章内容
-        articleContent = await ArticleService.GetArticleContentAsync(Path);
+        articleContent = await aService.GetArticleContentAsync(Path);
     }
 }

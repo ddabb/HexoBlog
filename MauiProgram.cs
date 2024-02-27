@@ -17,6 +17,7 @@ namespace HexoBlog
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddScoped<ClassifyService>();
+            builder.Services.AddScoped<ArticleService>();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://www.60points.com/api") });
 
 

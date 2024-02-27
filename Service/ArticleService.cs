@@ -1,43 +1,50 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ganss.Xss;
-using HexoBlog.Model;
-using Microsoft.AspNetCore.Components.Web;
+﻿using HexoBlog.Model;
+using RestSharp;
+using System.Text.Json;
 
 namespace HexoBlog.Service
 {
     internal class ArticleService
     {
-
+        private readonly RestClient _restClient;
+        public ArticleService()
+        {
+            _restClient = new RestClient("https://www.60points.com");
+        }
 
         private string articleContent;
 
 
-        public async Task GetArticleContentAsync(string path)
+        public async Task<string> GetArticleContentAsync(string path)
         {
             try
             {
-                try
+
+                var request = new RestRequest(path, Method.Get);
+
+                var response = _restClient.Execute<string>(request);
+
+                var options = new JsonSerializerOptions
                 {
-                    //var response = await Http.GetAsync($"articles/{Path}");
-                    //if (response.IsSuccessStatusCode)
-                    //{
-                    //    var content = await response.Content.ReadFromJsonAsync<Article>();
-                    //    articleContent = HtmlSanitizer.Sanitize(content.Content); // 假设你有一个HtmlSanitizer类来清理HTML内容
-                    //}
-                    //else
-                    //{
-                    //    // 处理错误情况
-                    //}
-                }
-                catch (HttpRequestException ex)
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+
+
+
+                //if (response.IsCompleted)
+                //{
+
+                await Task<string>.Run(() =>
                 {
-                    // 处理异常
-                }
+                    var data = response.Content;
+                    if (!string.IsNullOrEmpty(data))
+                    {
+                        articleContent = JsonSerializer.Deserialize<Article>(data, options)?.Content!;
+                    }
+
+                });
+
+                return articleContent;
 
             }
             catch (Exception ex)
@@ -45,7 +52,6 @@ namespace HexoBlog.Service
 
                 throw;
             }
-
         }
     }
 }
