@@ -1,11 +1,10 @@
-﻿@page "/tags"
+﻿@page "/classifyArtcle"
 @using HexoBlog.Model
 @using HexoBlog.Service
+@using System.Net;
+@using System.Linq;
 @inject ClassifyService CategoryService
 @inject NavigationManager NavigationManager
-
-<!-- 硬编码的a标签用于页面跳转 -->
-<a href="#" @onclick="GoToArticle">跳转到文章页面</a>
 
 
 
@@ -30,18 +29,36 @@ else
 }
 
 @code {
+    [Parameter]
+    public string Name { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        await CategoryService.LoadTagAsync();
+        // 获取当前的 URI
+        var uri = NavigationManager.Uri;
+
+        // 解析查询字符串
+        var queryParameters = new Uri(uri).Query.TrimStart('?').Split('&');
+        var json = "";
+        // 遍历查询字符串参数，并找到 name 参数的值
+        foreach (var parameter in queryParameters)
+        {
+            var keyValue = parameter.Split('=');
+            if (keyValue.Length == 2 && keyValue[0] == "name")
+            {
+                Name = keyValue[1];
+
+                string decodedString = WebUtility.UrlDecode(Name);
+                json = decodedString.Split('/').Last();
+                System.Diagnostics.Debug.WriteLine($"Title {json}");
+                break;
+            }
+        }
+
+        await CategoryService.LoadTagArticleAsync(json);
     }
 
-    private void GoToArticle()
-    {
-        var name = "PMP/引论/指南概述和目的/项目管理标准.json";
-    
-        NavigationManager.NavigateTo($"articles?name={name}");
 
-    }
     private void GoToArticle(string categoryName, string path)
     {
         // 根据categoryName构建name参数
@@ -49,7 +66,7 @@ else
         System.Diagnostics.Debug.WriteLine($"categoryName {categoryName}");
         System.Diagnostics.Debug.WriteLine($"path {path}");
         // 导航到articles页面并传递参数
-        NavigationManager.NavigateTo($"classifyArtcle?name={name}");
+        NavigationManager.NavigateTo($"articles?name={name}");
     }
     // 用于处理导航事件的方法（可选，如果不需要在点击时执行其他操作，可以移除）
     private void NavigateToArticle()

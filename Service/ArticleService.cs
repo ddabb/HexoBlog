@@ -1,5 +1,6 @@
 ﻿using HexoBlog.Model;
 using RestSharp;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace HexoBlog.Service
@@ -19,8 +20,8 @@ namespace HexoBlog.Service
         {
             try
             {
-
-                var request = new RestRequest($"api/articles/path", Method.Get);
+                Debug.WriteLine($"GetArticleContentAsync {path}");
+                var request = new RestRequest($"api/articles/{path}", Method.Get);
 
                 var response = _restClient.Execute<string>(request);
 
