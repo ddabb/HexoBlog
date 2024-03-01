@@ -1,7 +1,8 @@
 ﻿using HexoBlog.Model;
+using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 using RestSharp;
-using System.Text.Json;
-
+using System.Diagnostics;
 namespace HexoBlog.Service
 {
     internal class ArticleService
@@ -15,20 +16,19 @@ namespace HexoBlog.Service
         private string articleContent;
 
 
-        public async Task<string> GetArticleContentAsync(string path)
+        public async Task<MarkupString> GetArticleContentAsync(string path)
         {
             try
             {
-
-                var request = new RestRequest($"api/articles/{path}", Method.Get);
+                Debug.WriteLine($"GetArticleContentAsync {path}");
+                var request = new RestRequest($"{path}", Method.Get);
 
                 var response = _restClient.Execute<string>(request);
 
-                var options = new JsonSerializerOptions
+                var options = new JsonSerializerSettings
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
-
 
 
                 //if (response.IsCompleted)
@@ -39,12 +39,12 @@ namespace HexoBlog.Service
                     var data = response.Content;
                     if (!string.IsNullOrEmpty(data))
                     {
-                        articleContent = JsonSerializer.Deserialize<Article>(data, options)?.Content!;
+                        articleContent = JsonConvert.DeserializeObject<Article>(data, options)?.Content!;
                     }
 
                 });
 
-                return articleContent;
+                return new MarkupString(articleContent);
 
             }
             catch (Exception ex)

@@ -1,0 +1,83 @@
+﻿@page "/classifyArticle"
+@using HexoBlog.Model
+@using HexoBlog.Service
+@using System.Net;
+@using System.Linq;
+@using System.Net;
+@using Microsoft.AspNetCore.WebUtilities
+@inject ClassifyService CategoryService
+@inject NavigationManager nav
+
+@if (CategoryService.Articles.Count == 0)
+{
+    <p>classifyArtcle in...</p>
+}
+else
+{
+
+    <ul>
+        @foreach (var category in CategoryService.Articles)
+        {
+            <li>
+                <a href="#" @onclick="() => GoToTrueArticle(category.Title,category.Path)">@category.Title</a>
+                <p>Path: @category.Title</p>
+                <p>Path: @category.Path</p>
+
+            </li>
+        }
+    </ul>
+}
+
+@code {
+
+    [Parameter]
+    public string data { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var uri = new Uri(nav.Uri);
+
+        // 解析查询字符串
+        var queryParameters = QueryHelpers.ParseQuery(uri.Query);
+
+        // 尝试从查询字符串中获取data参数
+        if (queryParameters.TryGetValue("data", out var dataValues) && dataValues.Count > 0)
+        {
+            string encodedData = dataValues[0]; // 获取第一个data值
+
+            // 对URL编码的data字符串进行解码
+            string decodedData = System.Net.WebUtility.UrlDecode(encodedData);
+
+            // 假设data是一个JSON字符串，我们需要反序列化它以获取name和type
+            var dataObject = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(decodedData);
+
+            if (dataObject != null && dataObject.ContainsKey("name") && dataObject.ContainsKey("type"))
+            {
+                var name = dataObject["name"];
+                var type = dataObject["type"];
+
+                await CategoryService.LoadTagArticleS(name,type);
+            }
+        }
+
+
+
+ 
+    }
+
+    private void GoToTrueArticle(string categoryName, string path)
+    {
+        // 根据categoryName构建name参数
+        var name = $"{categoryName}.json";
+
+        // 导航到articles页面并传递参数
+        nav.NavigateTo($"articles?name={path}");
+    }
+    // 用于处理导航事件的方法（可选，如果不需要在点击时执行其他操作，可以移除）
+    private void NavigateToArticle()
+    {
+        // 这里可以执行一些在点击链接前的逻辑，比如确认对话框等
+        // 如果不需要，这个方法可以留空
+    }
+}

@@ -1,0 +1,50 @@
+﻿/* tags.css */
+.tag-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag-item {
+    /* 隔离效果，例如使用边框或阴影 */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tag-name-count {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: space-between; /* 水平间距 */
+}
+
+    .tag-name-count a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+
+        .tag-name-count a:hover {
+            color: #007BFF; /* 蓝色悬停效果 */
+        }
+
+.tag-count {
+    color: #666;
+    font-size: 0.8em;
+    background-color: #f0f0f0; /* 灰色背景 */
+    border-radius: 3px;
+    padding: 2px 5px;
+    margin-left: 5px;
+}
+
+.tag-details {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+    .tag-details p {
+        margin: 0;
+    }

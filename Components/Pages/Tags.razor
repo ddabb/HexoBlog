@@ -2,45 +2,66 @@
 @using HexoBlog.Model
 @using HexoBlog.Service
 @inject ClassifyService CategoryService
-@inject NavigationManager NavigationManager
+@inject NavigationManager nav
 
-<!-- 硬编码的a标签用于页面跳转 -->
-<a href="#" @onclick="GoToArticle">跳转到文章页面</a>
-
-
-
-
-@if (CategoryService.Categories.Count == 0)
+<head>
+    <link href="css/tags.css" rel="stylesheet" />
+</head>
+@if (CategoryService.Tags.Count == 0)
 {
     <p>Loading...</p>
 }
 else
 {
-    <ul>
-        @foreach (var category in CategoryService.Categories)
+    <ul class="tag-list">
+        @foreach (var category in CategoryService.Tags)
         {
-            <li>
-              
-                <p>Path: @category.Name</p>
-                <p>Path: @category.Path</p>
-                <p>Count: @category.Count</p>
+            <li class="tag-item">
+                <div class="tag-name-count">
+                    <a href="#" @onclick="() => GoToTagArticle(category.Name, category.Path)">
+                        @category.Name
+                    </a>
+                    <span class="tag-count">@category.Count</span>
+                </div>
+                <div class="tag-details">
+                    <p>Path: @category.Path</p>
+                </div>
             </li>
         }
     </ul>
 }
-
 @code {
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.LoadTagAsync();
     }
 
-    private void GoToArticle()
-    {
-        var name = "PMP/引论/指南概述和目的/项目管理标准.json";
-    
-        NavigationManager.NavigateTo($"articles?name={name}");
 
+    private void GoToTagArticle(string categoryName, string path)
+    {
+        // 根据categoryName构建name参数
+        var name = $"{categoryName}.json";
+        System.Diagnostics.Debug.WriteLine($"categoryName {categoryName}");
+        System.Diagnostics.Debug.WriteLine($"path {path}");
+
+        var articleParams = new
+        {
+            name ,
+            type = "tags"
+        };
+
+        // 将对象序列化为JSON字符串
+        string jsonParams = System.Text.Json.JsonSerializer.Serialize(articleParams);
+
+        // 将JSON字符串编码为URL安全的形式
+        string encodedJsonParams = System.Net.WebUtility.UrlEncode(jsonParams);
+
+        // 构造包含JSON字符串作为查询参数的URL
+        string url = $"classifyArticle?data={encodedJsonParams}";
+
+
+        // 导航到articles页面并传递参数
+        nav.NavigateTo(url);
     }
     // 用于处理导航事件的方法（可选，如果不需要在点击时执行其他操作，可以移除）
     private void NavigateToArticle()
