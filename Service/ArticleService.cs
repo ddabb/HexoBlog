@@ -1,8 +1,7 @@
 ﻿using HexoBlog.Model;
 using RestSharp;
 using System.Diagnostics;
-using System.Text.Json;
-
+using Newtonsoft.Json;
 namespace HexoBlog.Service
 {
     internal class ArticleService
@@ -25,11 +24,10 @@ namespace HexoBlog.Service
 
                 var response = _restClient.Execute<string>(request);
 
-                var options = new JsonSerializerOptions
+                var options = new JsonSerializerSettings
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
-
 
 
                 //if (response.IsCompleted)
@@ -40,7 +38,7 @@ namespace HexoBlog.Service
                     var data = response.Content;
                     if (!string.IsNullOrEmpty(data))
                     {
-                        articleContent = JsonSerializer.Deserialize<Article>(data, options)?.Content!;
+                        articleContent = JsonConvert.DeserializeObject<Article>(data, options)?.Content!;
                     }
 
                 });

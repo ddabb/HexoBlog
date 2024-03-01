@@ -9,20 +9,20 @@
 
 
 
-@if (CategoryService.Tags.Count == 0)
+@if (CategoryService.TagsInfo.Count == 0)
 {
     <p>Loading...</p>
 }
 else
 {
     <ul>
-        @foreach (var category in CategoryService.Tags)
+        @foreach (var category in CategoryService.TagsInfo.PostList)
         {
             <li>
-                <a href="#" @onclick="() => GoToArticle(category.Name,category.Path)">@category.Name</a>
-                <p>Path: @category.Name</p>
+                <a href="#" @onclick="() => GoToArticle(category.Title,category.Path)">@category.Title</a>
+                <p>Path: @category.Title</p>
                 <p>Path: @category.Path</p>
-                <p>Count: @category.Count</p>
+        
             </li>
         }
     </ul>

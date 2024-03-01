@@ -2,7 +2,7 @@
 using RestSharp;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text.Json;
+using Newtonsoft.Json;
 namespace HexoBlog.Service
 {
     public class ClassifyService
@@ -25,9 +25,9 @@ namespace HexoBlog.Service
 
                 var response = _restClient.Execute<string>(request);
 
-                var options = new JsonSerializerOptions
+                var options = new JsonSerializerSettings
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
 
                 Categories.Clear(); // 清除旧数据  
@@ -36,7 +36,7 @@ namespace HexoBlog.Service
                 await Task.Run(() =>
                 {
                     var data = response.Content;
-                    Categories = JsonSerializer.Deserialize<ObservableCollection<CategoryItem>>(data, options)!;
+                    Categories = JsonConvert.DeserializeObject<ObservableCollection<CategoryItem>>(data, options)!;
                 });
 
             }
@@ -57,10 +57,11 @@ namespace HexoBlog.Service
 
                 var response = _restClient.Execute<string>(request);
 
-                var options = new JsonSerializerOptions
+                var options = new JsonSerializerSettings
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
+
 
                 Tags.Clear(); // 清除旧数据  
 
@@ -72,7 +73,7 @@ namespace HexoBlog.Service
                 {
                     var data = response.Content;
                     Debug.WriteLine("LoadTagArticleAsync" + data);
-                    TagsInfo = JsonSerializer.Deserialize<CategoryItem>(data, options)!;
+                    TagsInfo = JsonConvert.DeserializeObject<CategoryItem>(data, options)!;
                 });
 
                 //}
@@ -96,9 +97,9 @@ namespace HexoBlog.Service
 
                 var response = _restClient.Execute<string>(request);
 
-                var options = new JsonSerializerOptions
+                var options = new JsonSerializerSettings
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
 
                 Tags.Clear(); // 清除旧数据  
@@ -110,7 +111,7 @@ namespace HexoBlog.Service
                 await Task.Run(() =>
                 {
                     var data = response.Content;
-                    Tags = JsonSerializer.Deserialize<ObservableCollection<CategoryItem>>(data, options)!;
+                    Tags = JsonConvert.DeserializeObject<ObservableCollection<CategoryItem>>(data, options)!;
                 });
 
                 //}
