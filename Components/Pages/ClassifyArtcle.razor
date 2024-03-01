@@ -3,8 +3,9 @@
 @using HexoBlog.Service
 @using System.Net;
 @using System.Linq;
+@using System.Net;
 @inject ClassifyService CategoryService
-@inject NavigationManager NavigationManager
+@inject NavigationManager nav
 
 @if (CategoryService.Articles.Count == 0)
 {
@@ -12,7 +13,6 @@
 }
 else
 {
-
 
     <ul>
         @foreach (var category in CategoryService.Articles)
@@ -34,28 +34,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // 获取当前的 URI
-        var uri = NavigationManager.Uri;
 
-        // 解析查询字符串
-        var queryParameters = new Uri(uri).Query.TrimStart('?').Split('&');
-        var json = "";
-        // 遍历查询字符串参数，并找到 name 参数的值
-        foreach (var parameter in queryParameters)
-        {
-            var keyValue = parameter.Split('=');
-            if (keyValue.Length == 2 && keyValue[0] == "name")
-            {
-                Name = keyValue[1];
+        await CategoryService.LoadTagArticleAsync(nav);
 
-                string decodedString = WebUtility.UrlDecode(Name);
-                json = decodedString.Split('/').Last();
-                System.Diagnostics.Debug.WriteLine($"Title {json}");
-                break;
-            }
-        }
-
-        await CategoryService.LoadTagArticleAsync(json);
+ 
     }
 
     private void GoToTrueArticle(string categoryName, string path)
@@ -65,7 +47,7 @@ else
         System.Diagnostics.Debug.WriteLine($"GoToTrueArticle categoryName {categoryName}");
         System.Diagnostics.Debug.WriteLine($"GoToTrueArticle path {path}");
         // 导航到articles页面并传递参数
-        NavigationManager.NavigateTo($"articles?name={path}");
+        nav.NavigateTo($"articles?name={path}");
     }
     // 用于处理导航事件的方法（可选，如果不需要在点击时执行其他操作，可以移除）
     private void NavigateToArticle()

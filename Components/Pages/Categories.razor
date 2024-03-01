@@ -2,7 +2,10 @@
 @using HexoBlog.Model
 @using HexoBlog.Service
 @inject ClassifyService CategoryService
-
+@inject NavigationManager nav
+<head>
+    <link href="css/tags.css" rel="stylesheet" />
+</head>
 <h1>Categories</h1>
 
 @if (CategoryService.Categories.Count == 0)
@@ -11,22 +14,56 @@
 }
 else
 {
-    <ul>
+    <ul class="tag-list">
         @foreach (var category in CategoryService.Categories)
         {
-            <li>
-              
-                <p>Path: @category.Name</p>
-                <p>Path: @category.Path</p>
-                <p>Count: @category.Count</p>
+            <li class="tag-item">
+                <div class="tag-name-count">
+                    <a href="#" @onclick="() => GoToTagArticle(category.Name, category.Path)">
+                        @category.Name
+                    </a>
+                    <span class="tag-count">@category.Count</span>
+                </div>
+                <div class="tag-details">
+                    <p>Path: @category.Path</p>
+                </div>
             </li>
         }
     </ul>
 }
 
+
+
 @code {
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.LoadCategoriesAsync();
+    }
+
+    private void GoToTagArticle(string categoryName, string path)
+    {
+        // 根据categoryName构建name参数
+        var name = $"{categoryName}.json";
+        System.Diagnostics.Debug.WriteLine($"categoryName {categoryName}");
+        System.Diagnostics.Debug.WriteLine($"path {path}");
+
+        var articleParams = new
+        {
+            name,
+            type = "categories"
+        };
+
+        // 将对象序列化为JSON字符串
+        string jsonParams = System.Text.Json.JsonSerializer.Serialize(articleParams);
+
+        // 将JSON字符串编码为URL安全的形式
+        string encodedJsonParams = System.Net.WebUtility.UrlEncode(jsonParams);
+
+        // 构造包含JSON字符串作为查询参数的URL
+        string url = $"classifyArticle?params={encodedJsonParams}";
+
+
+        // 导航到articles页面并传递参数
+        nav.NavigateTo(url);
     }
 }
