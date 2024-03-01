@@ -44,7 +44,7 @@ namespace HexoBlog.Service
 
                 });
 
-                return new MarkupString(articleContent);
+                return new MarkupString(HtmlCleaner.RemoveImages(articleContent));
 
             }
             catch (Exception ex)
