@@ -10,7 +10,7 @@
 
 <h1>@Title</h1>
 
-@if (articleContent != null)
+@if (articleContent.Value != null)
 {
     <div>@articleContent</div>
 }
@@ -26,7 +26,7 @@ else
     public string Name { get; set; }
     public string Title { get; set; }
 
-    private string articleContent;
+    private MarkupString articleContent;
 
     protected override async Task OnInitializedAsync()
     {

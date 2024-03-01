@@ -2,6 +2,7 @@
 using RestSharp;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Components;
 namespace HexoBlog.Service
 {
     internal class ArticleService
@@ -15,7 +16,7 @@ namespace HexoBlog.Service
         private string articleContent;
 
 
-        public async Task<string> GetArticleContentAsync(string path)
+        public async Task<MarkupString> GetArticleContentAsync(string path)
         {
             try
             {
@@ -43,7 +44,7 @@ namespace HexoBlog.Service
 
                 });
 
-                return articleContent;
+                return new MarkupString(articleContent);
 
             }
             catch (Exception ex)
