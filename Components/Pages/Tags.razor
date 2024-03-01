@@ -4,9 +4,6 @@
 @inject ClassifyService CategoryService
 @inject NavigationManager NavigationManager
 
-<!-- 硬编码的a标签用于页面跳转 -->
-<a href="#" @onclick="GoToArticle">跳转到文章页面</a>
-
 
 
 
@@ -20,7 +17,7 @@ else
         @foreach (var category in CategoryService.Tags)
         {
             <li>
-                <a href="#" @onclick="() => GoToArticle(category.Name,category.Path)">@category.Name</a>
+                <a href="#" @onclick="() => GoToTagArticle(category.Name,category.Path)">@category.Name</a>
                 <p>Path: @category.Name</p>
                 <p>Path: @category.Path</p>
                 <p>Count: @category.Count</p>
@@ -35,14 +32,8 @@ else
         await CategoryService.LoadTagAsync();
     }
 
-    private void GoToArticle()
-    {
-        var name = "PMP/引论/指南概述和目的/项目管理标准.json";
-    
-        NavigationManager.NavigateTo($"articles?name={name}");
 
-    }
-    private void GoToArticle(string categoryName, string path)
+    private void GoToTagArticle(string categoryName, string path)
     {
         // 根据categoryName构建name参数
         var name = $"{categoryName}.json";

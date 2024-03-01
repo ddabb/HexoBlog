@@ -6,29 +6,29 @@
 @inject ClassifyService CategoryService
 @inject NavigationManager NavigationManager
 
-
-
-
-@if (CategoryService.TagsInfo.Count == 0)
+@if (CategoryService.Articles.Count == 0)
 {
-    <p>Loading...</p>
+    <p>classifyArtcle in...</p>
 }
 else
 {
+
+
     <ul>
-        @foreach (var category in CategoryService.TagsInfo.PostList)
+        @foreach (var category in CategoryService.Articles)
         {
             <li>
-                <a href="#" @onclick="() => GoToArticle(category.Title,category.Path)">@category.Title</a>
+                <a href="#" @onclick="() => GoToTrueArticle(category.Title,category.Path)">@category.Title</a>
                 <p>Path: @category.Title</p>
                 <p>Path: @category.Path</p>
-        
+
             </li>
         }
     </ul>
 }
 
 @code {
+
     [Parameter]
     public string Name { get; set; }
 
@@ -58,15 +58,14 @@ else
         await CategoryService.LoadTagArticleAsync(json);
     }
 
-
-    private void GoToArticle(string categoryName, string path)
+    private void GoToTrueArticle(string categoryName, string path)
     {
         // 根据categoryName构建name参数
         var name = $"{categoryName}.json";
-        System.Diagnostics.Debug.WriteLine($"categoryName {categoryName}");
-        System.Diagnostics.Debug.WriteLine($"path {path}");
+        System.Diagnostics.Debug.WriteLine($"GoToTrueArticle categoryName {categoryName}");
+        System.Diagnostics.Debug.WriteLine($"GoToTrueArticle path {path}");
         // 导航到articles页面并传递参数
-        NavigationManager.NavigateTo($"articles?name={name}");
+        NavigationManager.NavigateTo($"articles?name={path}");
     }
     // 用于处理导航事件的方法（可选，如果不需要在点击时执行其他操作，可以移除）
     private void NavigateToArticle()

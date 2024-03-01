@@ -10,7 +10,7 @@ namespace HexoBlog.Service
         public ObservableCollection<CategoryItem> Categories { get; set; } = new ObservableCollection<CategoryItem>();
         public ObservableCollection<CategoryItem> Tags { get; set; } = new ObservableCollection<CategoryItem>();
 
-        public CategoryItem TagsInfo { get; set; } = new CategoryItem();
+        public ObservableCollection<Article> Articles { get; set; } = new ObservableCollection<Article>();
         private readonly RestClient _restClient;
         public ClassifyService()
         {
@@ -73,7 +73,7 @@ namespace HexoBlog.Service
                 {
                     var data = response.Content;
                     Debug.WriteLine("LoadTagArticleAsync" + data);
-                    TagsInfo = JsonConvert.DeserializeObject<CategoryItem>(data, options)!;
+                    Articles = JsonConvert.DeserializeObject<CategoryItem>(data, options).PostList!;
                 });
 
                 //}

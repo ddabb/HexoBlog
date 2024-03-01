@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace HexoBlog.Model
 {
@@ -8,11 +9,11 @@ namespace HexoBlog.Model
         public string Path { get; set; }
         public int Count { get; set; }
         [JsonProperty("postlist")]
-        public List<Article> PostList { get; set; } = new List<Article>();
+        public ObservableCollection<Article> PostList { get; set; } = new ObservableCollection<Article>();
     }
 
 
-  
+
 
 
 

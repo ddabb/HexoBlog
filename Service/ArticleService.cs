@@ -20,7 +20,7 @@ namespace HexoBlog.Service
             try
             {
                 Debug.WriteLine($"GetArticleContentAsync {path}");
-                var request = new RestRequest($"api/articles/{path}", Method.Get);
+                var request = new RestRequest($"{path}", Method.Get);
 
                 var response = _restClient.Execute<string>(request);
 
