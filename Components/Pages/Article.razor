@@ -4,7 +4,7 @@
 @using HexoBlog.Service
 @using System.Net;
 @using System.Linq;
-@inject NavigationManager NavigationManager
+@inject NavigationManager nav
 @inject ArticleService aService
 @inject HttpClient Http
 
@@ -31,7 +31,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         // 获取当前的 URI
-        var uri = NavigationManager.Uri;
+        var uri = nav.Uri;
 
         // 解析查询字符串
         var queryParameters = new Uri(uri).Query.TrimStart('?').Split('&');

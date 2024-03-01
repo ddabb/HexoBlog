@@ -60,7 +60,7 @@ else
         string encodedJsonParams = System.Net.WebUtility.UrlEncode(jsonParams);
 
         // 构造包含JSON字符串作为查询参数的URL
-        string url = $"classifyArticle?params={encodedJsonParams}";
+        string url = $"classifyArticle?data={encodedJsonParams}";
 
 
         // 导航到articles页面并传递参数

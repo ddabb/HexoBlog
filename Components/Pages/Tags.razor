@@ -2,7 +2,7 @@
 @using HexoBlog.Model
 @using HexoBlog.Service
 @inject ClassifyService CategoryService
-@inject NavigationManager NavigationManager
+@inject NavigationManager nav
 
 <head>
     <link href="css/tags.css" rel="stylesheet" />
@@ -57,11 +57,11 @@ else
         string encodedJsonParams = System.Net.WebUtility.UrlEncode(jsonParams);
 
         // 构造包含JSON字符串作为查询参数的URL
-        string url = $"classifyArticle?params={encodedJsonParams}";
+        string url = $"classifyArticle?data={encodedJsonParams}";
 
 
         // 导航到articles页面并传递参数
-        NavigationManager.NavigateTo(url);
+        nav.NavigateTo(url);
     }
     // 用于处理导航事件的方法（可选，如果不需要在点击时执行其他操作，可以移除）
     private void NavigateToArticle()

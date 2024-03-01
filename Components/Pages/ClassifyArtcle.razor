@@ -1,9 +1,10 @@
-﻿@page "/classifyArtcle"
+﻿@page "/classifyArticle"
 @using HexoBlog.Model
 @using HexoBlog.Service
 @using System.Net;
 @using System.Linq;
 @using System.Net;
+@using Microsoft.AspNetCore.WebUtilities
 @inject ClassifyService CategoryService
 @inject NavigationManager nav
 
@@ -30,12 +31,37 @@ else
 @code {
 
     [Parameter]
-    public string Name { get; set; }
+    public string data { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
 
-        await CategoryService.LoadTagArticleAsync(nav);
+        var uri = new Uri(nav.Uri);
+
+        // 解析查询字符串
+        var queryParameters = QueryHelpers.ParseQuery(uri.Query);
+
+        // 尝试从查询字符串中获取data参数
+        if (queryParameters.TryGetValue("data", out var dataValues) && dataValues.Count > 0)
+        {
+            string encodedData = dataValues[0]; // 获取第一个data值
+
+            // 对URL编码的data字符串进行解码
+            string decodedData = System.Net.WebUtility.UrlDecode(encodedData);
+
+            // 假设data是一个JSON字符串，我们需要反序列化它以获取name和type
+            var dataObject = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(decodedData);
+
+            if (dataObject != null && dataObject.ContainsKey("name") && dataObject.ContainsKey("type"))
+            {
+                var name = dataObject["name"];
+                var type = dataObject["type"];
+
+                await CategoryService.LoadTagArticleS(name,type);
+            }
+        }
+
+
 
  
     }
@@ -44,8 +70,7 @@ else
     {
         // 根据categoryName构建name参数
         var name = $"{categoryName}.json";
-        System.Diagnostics.Debug.WriteLine($"GoToTrueArticle categoryName {categoryName}");
-        System.Diagnostics.Debug.WriteLine($"GoToTrueArticle path {path}");
+
         // 导航到articles页面并传递参数
         nav.NavigateTo($"articles?name={path}");
     }

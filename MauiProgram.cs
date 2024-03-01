@@ -19,7 +19,7 @@ namespace HexoBlog
             builder.Services.AddScoped<ClassifyService>();
             builder.Services.AddScoped<ArticleService>();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://www.60points.com/api") });
-
+            builder.Services.AddTransient<MainPage>();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
