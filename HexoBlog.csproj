@@ -37,14 +37,23 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+        <AndroidSigningKeyStore>KeyStore\HexoBlog.keystore</AndroidSigningKeyStore>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
       <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+      <AndroidKeyStore>True</AndroidKeyStore>
+      <AndroidSigningStorePass>qq112112</AndroidSigningStorePass>
+      <AndroidSigningKeyAlias>HexoBlog</AndroidSigningKeyAlias>
+      <AndroidSigningKeyPass>qq112112</AndroidSigningKeyPass>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
       <AndroidPackageFormat>apk</AndroidPackageFormat>
+      <AndroidKeyStore>True</AndroidKeyStore>
+      <AndroidSigningStorePass>qq112112</AndroidSigningStorePass>
+      <AndroidSigningKeyAlias>HexoBlog</AndroidSigningKeyAlias>
+      <AndroidSigningKeyPass>qq112112</AndroidSigningKeyPass>
     </PropertyGroup>
 
     <ItemGroup>
