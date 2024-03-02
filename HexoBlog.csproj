@@ -38,6 +38,7 @@
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
         <AndroidSigningKeyStore>KeyStore\HexoBlog.keystore</AndroidSigningKeyStore>
+        <PublishAot>False</PublishAot>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
@@ -46,6 +47,10 @@
       <AndroidSigningStorePass>qq112112</AndroidSigningStorePass>
       <AndroidSigningKeyAlias>HexoBlog</AndroidSigningKeyAlias>
       <AndroidSigningKeyPass>qq112112</AndroidSigningKeyPass>
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
+      <PublishTrimmed>True</PublishTrimmed>
+	  <AndroidLinkTool>r8</AndroidLinkTool>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
@@ -54,6 +59,40 @@
       <AndroidSigningStorePass>qq112112</AndroidSigningStorePass>
       <AndroidSigningKeyAlias>HexoBlog</AndroidSigningKeyAlias>
       <AndroidSigningKeyPass>qq112112</AndroidSigningKeyPass>
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
+      <PublishTrimmed>False</PublishTrimmed>
+      <AndroidLinkTool>r8</AndroidLinkTool>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
+      <ApplicationId>com.60points.hexoblog</ApplicationId>
+      <ApplicationTitle>60Points</ApplicationTitle>
     </PropertyGroup>
 
     <ItemGroup>
@@ -75,6 +114,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Platforms\Android\r8.cfg" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
         <PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
         <PackageReference Include="HtmlSanitizer" Version="8.0.843" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.2" />
@@ -84,6 +129,16 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="RestSharp" Version="110.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProguardConfiguration Include="Platforms\Android\r8.cfg" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+      <PackageReference Include="Chi.MauiBinding.Android.Toaster">
+        <Version>12.2.0</Version>
+      </PackageReference>
     </ItemGroup>
 
 </Project>
