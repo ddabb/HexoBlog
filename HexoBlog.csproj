@@ -49,8 +49,9 @@
       <AndroidSigningKeyPass>qq112112</AndroidSigningKeyPass>
       <ApplicationId>com.60points.hexoblog</ApplicationId>
       <ApplicationTitle>60Points</ApplicationTitle>
-      <PublishTrimmed>True</PublishTrimmed>
+      <PublishTrimmed>False</PublishTrimmed>
 	  <AndroidLinkTool>r8</AndroidLinkTool>
+	  <AndroidEnableSGenConcurrent>False</AndroidEnableSGenConcurrent>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
@@ -62,7 +63,8 @@
       <ApplicationId>com.60points.hexoblog</ApplicationId>
       <ApplicationTitle>60Points</ApplicationTitle>
       <PublishTrimmed>False</PublishTrimmed>
-      <AndroidLinkTool>r8</AndroidLinkTool>
+      <RunAOTCompilation>False</RunAOTCompilation>
+      <AndroidEnableSGenConcurrent>False</AndroidEnableSGenConcurrent>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
